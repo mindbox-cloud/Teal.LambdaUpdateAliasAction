@@ -3,6 +3,41 @@ description: 'A Github action that updates a AWS lambda alias'
 branding:
   icon: activity
   color: orange
+inputs:
+  aws_access_key_id:
+    description: 'AWS access key id'
+    required: true
+  aws_secret_access_key:
+    description: 'AWS secret access key'
+    required: true
+  aws_region:
+    description: 'AWS region'
+    required: true
+  function_name:
+    description: 'AWS lambda function name'
+    required: true
+  alias_name:
+    description: 'AWS lambda alias name'
+    required: true
+  function_version:
+    description: 'AWS lambda function version'
+    required: false
+outputs:
+  latest-version:
+    description: 'Latest version of the function'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - '--aws_access_key_id'
+    - ${{ inputs.aws_access_key_id }}
+    - '--aws_region'
+    - ${{ inputs.aws_secret_access_key }}
+    - '--aws_region'
+    - ${{ inputs.aws_secret_access_key }}
+    - '--function_name'
+    - ${{ inputs.function_name }}
+    - '--alias_name'
+    - ${{ inputs.alias_name }}
+    - '--function_version'
+    - ${{ inputs.function_version }}
