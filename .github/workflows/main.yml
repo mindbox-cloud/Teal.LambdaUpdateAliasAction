@@ -14,4 +14,4 @@ jobs:
 
     - name: Lambda update alias action
       id: lambda-update-alias
-      uses: LipatovAlexander/LambdaUpdateAliasAction@main
+      uses: LipatovAlexander/LambdaUpdateAliasAction@master
