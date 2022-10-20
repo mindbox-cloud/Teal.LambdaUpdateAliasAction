@@ -38,7 +38,10 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
 
 	try
 	{
-		await foreach (var version in paginator.Versions) versions.Add(version);
+		await foreach (var version in paginator.Versions)
+		{
+			versions.Add(version);
+		}
 	}
 	catch (ResourceNotFoundException)
 	{
@@ -52,9 +55,12 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
 		Environment.Exit(2);
 	}
 
-	if (inputs.FunctionVersion is not null)
+	if (!string.IsNullOrEmpty(inputs.FunctionVersion))
 	{
-		if (versions.Any(v => v.Version == inputs.FunctionVersion)) return inputs.FunctionVersion;
+		if (versions.Any(v => v.Version == inputs.FunctionVersion))
+		{
+			return inputs.FunctionVersion;
+		}
 
 		Console.Error.WriteLine("Version `{0}` does not exist", inputs.FunctionVersion);
 		Environment.Exit(3);
@@ -62,10 +68,8 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
 
 	versions.Sort((a, b) =>
 	{
-		static int GetVersion(FunctionConfiguration fc)
-		{
-			return fc.Version == "$LATEST" ? 0 : int.Parse(fc.Version);
-		}
+		static int GetVersion(FunctionConfiguration fc) =>
+			fc.Version == "$LATEST" ? 0 : int.Parse(fc.Version);
 
 		var aVersion = GetVersion(a);
 		var bVersion = GetVersion(b);
