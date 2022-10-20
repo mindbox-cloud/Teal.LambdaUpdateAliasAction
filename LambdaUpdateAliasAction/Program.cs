@@ -8,14 +8,15 @@ parser.WithNotParsed(
         Environment.Exit(2);
     });
 
-await parser.WithParsedAsync(UpdateAliasAsync);
+await parser.WithParsedAsync(RunAction);
 
-static async Task UpdateAliasAsync(ActionInputs inputs)
+static async Task RunAction(ActionInputs inputs)
 {
     var lambda = CreateLambdaClient(inputs);
-    var latestVersion = await FindLatestVersionAsync(lambda, inputs);
+    inputs.FunctionVersion = await FindLatestVersionAsync(lambda, inputs);
+    await UpdateOrCreateAliasAsync(lambda, inputs);
     
-    Console.WriteLine($"::set-output name=latest-version::{latestVersion}");
+    Console.WriteLine($"::set-output name=latest-version::{inputs.FunctionVersion}");
 
     Environment.Exit(0);
 }
@@ -62,4 +63,26 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
     });
 
     return versions[0].Version;
+}
+
+static async Task UpdateOrCreateAliasAsync(IAmazonLambda lambda, ActionInputs inputs)
+{
+    try
+    {
+        await lambda.UpdateAliasAsync(new UpdateAliasRequest
+        {
+            FunctionName = inputs.FunctionName,
+            Name = inputs.AliasName,
+            FunctionVersion = inputs.FunctionVersion
+        });
+    }
+    catch (ResourceNotFoundException)
+    {
+        await lambda.CreateAliasAsync(new CreateAliasRequest
+        {
+            FunctionName = inputs.FunctionName,
+            Name = inputs.AliasName,
+            FunctionVersion = inputs.FunctionVersion
+        });
+    }
 }

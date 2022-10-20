@@ -14,7 +14,7 @@ LABEL homepage="https://github.com/LipatovAlexander/LambdaUpdateAliasAction"
 # Label as GitHub action
 LABEL com.github.actions.name="Lambda update alias action"
 # Limit to 160 characters
-LABEL com.github.actions.description="A Github action that updates a AWS lambda alias"
+LABEL com.github.actions.description="A Github action that updates or creates a AWS lambda alias"
 # See branding:
 # https://docs.github.com/actions/creating-actions/metadata-syntax-for-github-actions#branding
 LABEL com.github.actions.icon="activity"

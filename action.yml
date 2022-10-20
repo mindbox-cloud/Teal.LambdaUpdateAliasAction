@@ -1,5 +1,5 @@
 name: 'Lambda update alias action'
-description: 'A Github action that updates a AWS lambda alias'
+description: 'A Github action that updates or creates a AWS lambda alias'
 branding:
   icon: activity
   color: orange
