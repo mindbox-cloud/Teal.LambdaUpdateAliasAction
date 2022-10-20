@@ -5,7 +5,7 @@ parser.WithNotParsed(
         Console.Error.WriteLine("Errors occurred while parsing inputs: {0}", 
             string.Join(Environment.NewLine, errors.Select(error => error.ToString())));
         
-        Environment.Exit(2);
+        Environment.Exit(1);
     });
 
 await parser.WithParsedAsync(RunAction);
@@ -31,25 +31,39 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
 {
     var paginator = lambda.Paginators.ListVersionsByFunction(new ListVersionsByFunctionRequest
     {
-        FunctionName = inputs.FunctionName,
+        FunctionName = inputs.FunctionName
     });
 
     var versions = new List<FunctionConfiguration>();
 
-    await foreach (var version in paginator.Versions)
+    try
     {
-        versions.Add(version);
+        await foreach (var version in paginator.Versions)
+        {
+            versions.Add(version);
+        }
+    }
+    catch (ResourceNotFoundException)
+    {
+        Console.Error.WriteLine("Function with name: {0} does not exist", inputs.FunctionVersion);
+        Environment.Exit(3);
     }
 
     if (versions.Count == 0)
     {
         Console.Error.WriteLine("No versions found");
-        Environment.Exit(3);
+        Environment.Exit(2);
     }
 
-    if (inputs.FunctionVersion is not null && versions.Any(v => v.Version == inputs.FunctionVersion))
+    if (inputs.FunctionVersion is not null)
     {
-        return inputs.FunctionVersion;
+        if (versions.Any(v => v.Version == inputs.FunctionVersion))
+        {
+            return inputs.FunctionVersion;
+        }
+
+        Console.Error.WriteLine("Version `{0}` does not exist", inputs.FunctionVersion);
+        Environment.Exit(3);
     }
 
     versions.Sort((a, b) =>
