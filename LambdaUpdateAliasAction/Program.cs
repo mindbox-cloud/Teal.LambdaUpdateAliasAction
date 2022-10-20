@@ -15,7 +15,6 @@ static async Task RunAction(ActionInputs inputs)
     var lambda = CreateLambdaClient(inputs);
     inputs.FunctionVersion = await FindLatestVersionAsync(lambda, inputs);
     await UpdateOrCreateAliasAsync(lambda, inputs);
-    Environment.SetEnvironmentVariable("GITHUB_OUTPUT", $"latest-version={inputs.FunctionVersion}");
 
     Environment.Exit(0);
 }

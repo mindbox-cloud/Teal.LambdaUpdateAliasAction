@@ -22,9 +22,6 @@ inputs:
   function_version:
     description: 'AWS lambda function version'
     required: false
-outputs:
-  latest-version:
-    description: 'Latest version of the function'
 runs:
   using: 'docker'
   image: 'Dockerfile'
