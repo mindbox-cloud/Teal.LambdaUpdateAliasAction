@@ -30,23 +30,30 @@ static IAmazonLambda CreateLambdaClient(ActionInputs inputs)
 
 static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInputs inputs)
 {
-    var data = await lambda.ListVersionsByFunctionAsync(new ListVersionsByFunctionRequest
+    var paginator = lambda.Paginators.ListVersionsByFunction(new ListVersionsByFunctionRequest
     {
-        FunctionName = inputs.FunctionName
+        FunctionName = inputs.FunctionName,
     });
 
-    if (data.Versions.Count == 0)
+    var versions = new List<FunctionConfiguration>();
+
+    await foreach (var version in paginator.Versions)
+    {
+        versions.Add(version);
+    }
+
+    if (versions.Count == 0)
     {
         Console.Error.WriteLine("No versions found");
         Environment.Exit(3);
     }
 
-    if (inputs.FunctionVersion is not null && data.Versions.Any(v => v.Version == inputs.FunctionVersion))
+    if (inputs.FunctionVersion is not null && versions.Any(v => v.Version == inputs.FunctionVersion))
     {
         return inputs.FunctionVersion;
     }
 
-    data.Versions.Sort((a, b) =>
+    versions.Sort((a, b) =>
     {
         int GetVersion(FunctionConfiguration fc) => fc.Version == "$LATEST" ? 0 : int.Parse(fc.Version);
         var aVersion = GetVersion(a);
@@ -54,5 +61,5 @@ static async Task<string> FindLatestVersionAsync(IAmazonLambda lambda, ActionInp
         return bVersion - aVersion;
     });
 
-    return data.Versions[0].Version;
+    return versions[0].Version;
 }
