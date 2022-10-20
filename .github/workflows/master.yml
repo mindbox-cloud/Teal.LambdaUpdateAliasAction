@@ -1,0 +1,17 @@
+name: 'Lambda update alias action'
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  test-run:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Lambda update alias action
+      id: lambda-update-alias
+      uses: LipatovAlexander/LambdaUpdateAliasAction@master
