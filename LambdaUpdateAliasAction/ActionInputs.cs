@@ -18,6 +18,6 @@ public sealed class ActionInputs
 	[Option("alias_name", Required = true)]
 	public string AliasName { get; set; } = default!;
 
-	[Option("function_version", Required = false)]
+	[Option("function_version", Required = false, Default = null)]
 	public string? FunctionVersion { get; set; }
 }
