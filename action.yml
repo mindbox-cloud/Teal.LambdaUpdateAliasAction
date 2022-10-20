@@ -1,0 +1,8 @@
+name: 'Lambda update alias action'
+description: 'A Github action that updates a AWS lambda alias'
+branding:
+  icon: activity
+  color: orange
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

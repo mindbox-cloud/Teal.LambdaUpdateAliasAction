@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdaUpdateAliasAction", "LambdaUpdateAliasAction\LambdaUpdateAliasAction.csproj", "{D1D80400-8E28-4FBA-B1A2-C380769C87E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{17665B00-E9F9-4C6E-821B-7B5C52A97E65}"
+	ProjectSection(SolutionItems) = preProject
+		action.yml = action.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1D80400-8E28-4FBA-B1A2-C380769C87E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1D80400-8E28-4FBA-B1A2-C380769C87E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1D80400-8E28-4FBA-B1A2-C380769C87E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1D80400-8E28-4FBA-B1A2-C380769C87E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
