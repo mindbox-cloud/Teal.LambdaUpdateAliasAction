@@ -12,7 +12,7 @@ static TService Get<TService>(IHost host)
     where TService : notnull =>
     host.Services.GetRequiredService<TService>();
 
-var parser = Default.ParseArguments(() => new ActionInputs(), args);
+var parser = Default.ParseArguments<ActionInputs>(args);
 parser.WithNotParsed(
     errors =>
     {
