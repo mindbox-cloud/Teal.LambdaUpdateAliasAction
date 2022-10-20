@@ -31,10 +31,10 @@ runs:
   args:
     - '--aws_access_key_id'
     - ${{ inputs.aws_access_key_id }}
-    - '--aws_region'
+    - '--aws_secret_access_key'
     - ${{ inputs.aws_secret_access_key }}
     - '--aws_region'
-    - ${{ inputs.aws_secret_access_key }}
+    - ${{ inputs.aws_region }}
     - '--function_name'
     - ${{ inputs.function_name }}
     - '--alias_name'
