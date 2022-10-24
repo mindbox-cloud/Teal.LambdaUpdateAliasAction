@@ -21,6 +21,6 @@ LABEL com.github.actions.icon="activity"
 LABEL com.github.actions.color="orange"
 
 # Relayer the .NET SDK, anew with the build output
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/runtime:6.0
 COPY --from=build-env /app/out .
 ENTRYPOINT [ "dotnet", "/LambdaUpdateAliasAction.dll" ]
