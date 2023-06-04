@@ -20,4 +20,13 @@ public sealed class ActionInputs
 
 	[Option("function_version", Required = false)]
 	public string? FunctionVersion { get; set; }
+
+	[Option("wait_until_concurrency_updated", Required = false)]
+	public bool WaitUntilConcurrencyUpdated { get; set; }
+
+	[Option("max_wait_until_concurrency_updated",
+		Required = false,
+		Default = 600_000,
+		Min = 1)]
+	public int MaxWaitUntilConcurrencyUpdated { get; set; }
 }
