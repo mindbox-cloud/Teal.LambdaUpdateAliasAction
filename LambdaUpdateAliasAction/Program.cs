@@ -125,7 +125,9 @@ static async Task WaitUntilConcurrencyUpdatedAsync(IAmazonLambda lambda, ActionI
 	{
 		var response = await lambda.GetAliasAsync(request, cts.Token);
 
-		if (!response.RoutingConfig.AdditionalVersionWeights.Any())
+		var additionalVersionWeights = response.RoutingConfig?.AdditionalVersionWeights;
+
+		if (additionalVersionWeights is null || !additionalVersionWeights.Any())
 		{
 			return;
 		}
