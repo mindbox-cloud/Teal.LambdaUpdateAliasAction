@@ -123,14 +123,14 @@ static async Task WaitUntilConcurrencyUpdatedAsync(IAmazonLambda lambda, ActionI
 
 	while (!cts.IsCancellationRequested)
 	{
-		var response = await lambda.GetAliasAsync(request);
+		var response = await lambda.GetAliasAsync(request, cts.Token);
 
 		if (!response.RoutingConfig.AdditionalVersionWeights.Any())
 		{
 			return;
 		}
 
-		await timer.WaitForNextTickAsync();
+		await timer.WaitForNextTickAsync(cts.Token);
 	}
 
 	Console.Error.WriteLine("Timeout {0} was exceeded. To increase the time use the option 'max_wait_until_concurrency_updated'",
