@@ -1,0 +1,26 @@
+﻿name: Release
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  release:
+    name: Create github release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate release number
+        id: release-number
+        uses: mindbox-moscow/gha-release-number@v1.0.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create github release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.release-number.outputs.release-number }}
+          name: "Release ${{ steps.release-number.outputs.release-number }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
