@@ -110,7 +110,7 @@ static async Task WaitUntilConcurrencyUpdatedAsync(IAmazonLambda lambda, ActionI
 {
 	Console.WriteLine("Wait until concurrency updated");
 
-	using var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+	using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
 
 	var request = new GetAliasRequest
 	{
@@ -118,7 +118,7 @@ static async Task WaitUntilConcurrencyUpdatedAsync(IAmazonLambda lambda, ActionI
 		Name = inputs.AliasName
 	};
 
-	var delay = TimeSpan.FromMilliseconds(inputs.MaxWaitUntilConcurrencyUpdated);
+	var delay = TimeSpan.FromSeconds(inputs.MaxWaitUntilConcurrencyUpdated);
 	using var cts = new CancellationTokenSource(delay);
 
 	while (!cts.IsCancellationRequested)
