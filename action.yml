@@ -25,9 +25,11 @@ inputs:
   wait_until_concurrency_updated:
     description: 'Indicates whether to wait for a provisioned concurrency update'
     required: false
+    default: "false"
   max_wait_until_concurrency_updated:
     description: 'Max time in seconds to wait while provisioned concurrency update'
     required: false
+    default: "600"
 runs:
   using: 'docker'
   image: 'Dockerfile'

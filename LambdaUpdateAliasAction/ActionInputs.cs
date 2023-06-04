@@ -24,8 +24,6 @@ public sealed class ActionInputs
 	[Option("wait_until_concurrency_updated", Required = false)]
 	public bool WaitUntilConcurrencyUpdated { get; set; }
 
-	[Option("max_wait_until_concurrency_updated",
-		Required = false,
-		Default = 600)]
+	[Option("max_wait_until_concurrency_updated", Required = false)]
 	public int MaxWaitUntilConcurrencyUpdated { get; set; }
 }
