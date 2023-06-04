@@ -16,6 +16,11 @@ static async Task RunAction(ActionInputs inputs)
 	inputs.FunctionVersion = await FindLatestVersionAsync(lambda, inputs);
 	await UpdateOrCreateAliasAsync(lambda, inputs);
 
+	if (inputs.WaitUntilConcurrencyUpdated)
+	{
+		await WaitUntilConcurrencyUpdatedAsync(lambda, inputs);
+	}
+
 	Environment.Exit(0);
 }
 
@@ -99,4 +104,37 @@ static async Task UpdateOrCreateAliasAsync(IAmazonLambda lambda, ActionInputs in
 			FunctionVersion = inputs.FunctionVersion
 		});
 	}
+}
+
+static async Task WaitUntilConcurrencyUpdatedAsync(IAmazonLambda lambda, ActionInputs inputs)
+{
+	Console.WriteLine("Wait until concurrency updated");
+
+	using var timer = new PeriodicTimer(TimeSpan.FromSeconds(1));
+
+	var request = new GetAliasRequest
+	{
+		FunctionName = inputs.FunctionName,
+		Name = inputs.AliasName
+	};
+
+	var delay = TimeSpan.FromSeconds(inputs.MaxWaitUntilConcurrencyUpdated);
+	using var cts = new CancellationTokenSource(delay);
+
+	while (!cts.IsCancellationRequested)
+	{
+		var response = await lambda.GetAliasAsync(request);
+
+		if (!response.RoutingConfig.AdditionalVersionWeights.Any())
+		{
+			return;
+		}
+
+		await timer.WaitForNextTickAsync();
+	}
+
+	Console.Error.WriteLine("Timeout {0} was exceeded. To increase the time use the option 'max_wait_until_concurrency_updated'",
+		inputs.MaxWaitUntilConcurrencyUpdated);
+
+	Environment.Exit(4);
 }

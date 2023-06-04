@@ -22,6 +22,12 @@ inputs:
   function_version:
     description: 'AWS lambda function version'
     required: false
+  wait_until_concurrency_updated:
+    description: 'Indicates whether to wait for a provisioned concurrency update'
+    required: false
+  max_wait_until_concurrency_updated:
+    description: 'Max time in seconds to wait while provisioned concurrency update'
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -38,3 +44,7 @@ runs:
     - ${{ inputs.alias_name }}
     - '--function_version'
     - ${{ inputs.function_version }}
+    - '--wait_until_concurrency_updated'
+    - ${{ inputs.wait_until_concurrency_updated }}
+    - '--max_wait_until_concurrency_updated'
+    - ${{ inputs.max_wait_until_concurrency_updated }}
